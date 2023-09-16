@@ -1,0 +1,47 @@
+﻿Feature: 1.1 Sign in to the App
+    
+  Given application URL is opened
+Scenario: Standard user signs in successfully
+    Given user enters "standard_user" into "Username" input
+    And user enters "secret_sauce" into "Password" input
+    When user clicks the "Login" button
+    Then they should be successfully logged in
+    And "Products" page should be visible
+    
+       
+Scenario: Locked out user sees error message
+          When the user enters the following credentials:
+          | Username        | Password     |
+          | locked_out_user | secret_sauce |
+          And clicks the Login button
+          Then they should see the error message "Sorry, this user has been locked out"
+        
+Scenario: Invalid credentials (invalid username)
+        When the user enters invalid credentials:
+         | Username          | Password |
+         | standard          | secret_sauce |
+        And clicks the Login button
+        Then user should see an error message "Username and password do not match any user in this service"
+        
+Scenario: User leaves username field empty
+    When the user leaves the "Username" field empty
+    And user enters "secret_sauce" into "Password" input
+    And clicks the "Login" button
+    Then user should see an error message "Username is required"
+    
+Scenario: User leaves password field empty
+    When the user leaves the "Password" field empty
+    And user enters "standard_user" into "Username" input
+    And clicks the "Login" button
+    Then user should see an error message "Password is required"
+    
+    
+Scenario: Check case sensitivity: User enters valid username with mixed case and correct password
+    Given user enters "Standard_user" into "Username" input
+    And user enters "secret_sauce" into "Password" input
+    When user clicks the "Login" button
+    Then user should see an error message "Username and password do not match any user in this service"
+
+
+        
+        
